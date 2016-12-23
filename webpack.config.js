@@ -3,7 +3,7 @@ var webpackTargetElectronRenderer = require('webpack-target-electron-renderer');
 
 var config = {
   entry: {
-    mainWindow: ['./app/mainWindow.jsx']
+    mainWindow: ['./app/sections/windows/control/nav.jsx', './app/sections/windows/RightContacts.jsx']
   },
 output: {
   path: './app/built',

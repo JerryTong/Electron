@@ -10,7 +10,7 @@ let mainWindow;
 
 function createWindow () {
   // 建立 browser window
-  mainWindow = new BrowserWindow({width: 800, height: 600});
+  mainWindow = new BrowserWindow({width: 1440, height: 900});
 
   // 載入 mainWindow.html 作為畫面
   mainWindow.loadURL('file://' + __dirname + '/app/mainWindow.html');
