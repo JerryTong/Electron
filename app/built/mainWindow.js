@@ -107,7 +107,18 @@
 	        value: function leftNavigation(mode) {
 	            var _this2 = this;
 
-	            return _jquery2.default.getJSON('http://localhost:3000/solr/allleftnavigation?mode=' + mode).then(function (data) {
+	            // call nodejs api
+	            //var request = 'http://localhost:3000/solr/allleftnavigation?mode=' + mode;
+
+	            // call solr
+	            var request;
+	            if (mode == "WEB") {
+	                request = "http://10.16.133.104:8983/solr/b2blog/select?q=*%3A*&sort=time_tamp+DESC&rows=0&wt=json&indent=true&facet=true&facet.field=page_name";
+	            } else {
+	                request = "http://10.16.133.104:8983/solr/b2blog/select?q=*%3A*&sort=time_tamp+DESC&rows=0&wt=json&indent=true&facet=true&facet.field=service_name";
+	            }
+
+	            return _jquery2.default.getJSON(request).then(function (data) {
 
 	                // select facet field name.
 	                var nodeList;
@@ -124,7 +135,7 @@
 	                    navData.push(tmp);
 	                }
 
-	                console.log("nav ajax complete.");
+	                console.log("nav ajax complete. " + request);
 	                _this2.setState({ list: navData });
 	            });
 	        }
@@ -801,12 +812,18 @@
 	 * will remain to ensure logic does not differ in production.
 	 */
 
-	function invariant(condition, format, a, b, c, d, e, f) {
-	  if (process.env.NODE_ENV !== 'production') {
+	var validateFormat = function validateFormat(format) {};
+
+	if (process.env.NODE_ENV !== 'production') {
+	  validateFormat = function validateFormat(format) {
 	    if (format === undefined) {
 	      throw new Error('invariant requires an error message argument');
 	    }
-	  }
+	  };
+	}
+
+	function invariant(condition, format, a, b, c, d, e, f) {
+	  validateFormat(format);
 
 	  if (!condition) {
 	    var error;
@@ -31652,9 +31669,15 @@
 	            var params = common.parseQueryString();
 
 	            if (params["pagename"]) {
-	                return _jquery2.default.getJSON('http://localhost:3000/solr/pagesearch/' + params["pagename"]).then(function (data) {
+	                // call nodejs api
+	                //var reqeust = 'http://localhost:3000/solr/pagesearch/' + params["pagename"];
+
+	                // call solr
+	                var reqeust = "http://10.16.133.104:8983/solr/b2blog/select?q=page_name%3A" + params["pagename"] + "&sort=time_tamp+DESC&wt=json&indent=true&group=true&group.field=request_trace_id&group.limit=-1";
+
+	                return _jquery2.default.getJSON(reqeust).then(function (data) {
 	                    _this2.setState({ contact: data.grouped.request_trace_id.groups });
-	                    console.log("contact ajax complete." + "@pagename = " + params["pagename"] + "link = " + 'http://localhost:3000/solr/pagesearch/' + params["pagename"]);
+	                    console.log("contact ajax complete." + "@pagename = " + params["pagename"] + "link = " + reqeust);
 	                });
 	            }
 	        }

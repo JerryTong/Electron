@@ -16,7 +16,7 @@ function createWindow () {
   mainWindow.loadURL('file://' + __dirname + '/app/mainWindow.html');
 
   // 開啟開發者工具
-  mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
 
   // 當 browser window 被關閉時，會送出 'closed' 訊號，並執行相關的 callback
   mainWindow.on('closed', function() {
